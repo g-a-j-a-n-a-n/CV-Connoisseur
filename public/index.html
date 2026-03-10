@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CV Connoisseur</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!--Main Container to hold everything-->
+<div class="app-container">
+
+    <!--Left Sidebar (History-->
+    <div id="sidebar" class="sidebar bg-light border-end">
+        <div class="p-3">
+            <button class="btn btn-secondary w-100 mb-2 text-start sidebar-item">Previous Review 1</button>
+            <button class="btn btn-secondary w-100 mb-2 text-start sidebar-item">Previous Review 2</button>
+        </div>
+    </div>
+
+    <!--Main Content Area (Right Side)-->
+    <div class="main-content">
+
+        <!--Header (Logo, Title, Toggle Button)-->
+        <header class="header p-3 border-bottom d-flex align-items-center justify-content-center position-relative">
+            <!--Button to toggle the sidebar (positioned on the left)-->
+            <button id="toggleSidebarBtn" class="btn btn-outline-secondary position-absolute start-0 ms-3">☰ History</button>
+
+            <!--Logo and Title block-->
+            <img src="Logo/Logo_img.png" alt="Logo" class="mb-2" style="width: 100px;">
+            <div class="text-center header-title">
+                <h2 class="mb-0 text-primary fw-bold">CV Connoisseur</h2>
+                <small class="text-muted">AI-Powered Resume Reviews</small>
+            </div>
+        </header>
+
+        <!--Chat / Response Area (white area)-->
+        <main class="chat-area p-4" id="chatArea">
+            <!-- Example of an AI response bubble -->
+            <div class="ai-message bg-light p-3 rounded mb-3 border w-75">
+                <p class="mb-0">Hello! Paste your resume below and I will review it.</p>
+            </div>
+        </main>
+
+        <!--The Input Bar (Bottom gray bar)-->
+        <div class="input-area py-2 px-4">
+            <div class="input-group input-group-lg shadow-sm overflow-hidden bg-light rounded-3">
+                <!--Text input-->
+                <textarea
+                        id="resumeInput"
+                        class="form-control border-0 bg-transparent ps-4 resume-textarea"
+                        placeholder="Paste your resume here..."
+                        rows="4"
+                ></textarea>
+                <!--Submit Button-->
+                <button class="btn px-4 fw-bold" id="reviewBtn">Review</button>
+            </div>
+        </div>
+        <footer class="text-center text-muted mt-1">© Copyright 2026 Gajanan Dhongade</footer>
+    </div>
+</div>
+
+<script src="main.js"></script>
+</body>
+</html>
