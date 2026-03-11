@@ -17,7 +17,9 @@ export default async function review(req) {
                 messages: [
                     {
                         role: "system",
-                        content: "You are an expert technical recruiter. Review the provided resume text. Give 2 strengths and 2 areas for improvement. Present your response in paragraphs and don't use any highlights, boldings, or any special sort of text."
+                        content: "You are an expert technical recruiter. Review the provided" +
+                            " resume text. Give 2 strengths and 2 areas for improvement." +
+                            "  Present your response in paragraphs and don't use any highlights, boldings, or any special sort of text."
                     },
                     {
                         role: "user",
