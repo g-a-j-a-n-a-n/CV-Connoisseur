@@ -1,16 +1,4 @@
 
-async function apiSearch(searchTerm) {
-    const netlifyFuncionURL = "/.netlify/functions/search?q=";
-    const options = {
-        method: 'GET'
-    };
-
-    const repsonse = await fetch(netlifyFuncionURL, options);
-    const data = await response.json();
-
-    console.log(data);
-}
-
 const inputBox = document.querySelector('#resumeInput');
 const sendBtn = document.querySelector('#reviewBtn');
 const chatArea = document.querySelector('#chatArea');
@@ -26,13 +14,29 @@ sendBtn.addEventListener('click', () => {
         userBubble.className = "bg-primary text-white p-3 rounded mb-3 ms-auto w-75"; //adds bootstrap classes to userBubble
         chatArea.appendChild(userBubble); //adds user input within the ChatArea element
         inputBox.value = "";
-        setTimeout(() => {
+        setTimeout(async () => {
             let aiBubble = document.createElement('div');
-            aiBubble.textContent = "Fake AI response";
-            aiBubble.className = "bg-light p-3 rounded mb-3 border w-75";
-            chatArea.appendChild(aiBubble); //adds AI response within the ChatArea element
+            try {
+                // Notice the URL changed to Groq's endpoint
+                const apiResponse = await fetch('/.netlify/functions/review', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({resume: inputText})
+                });
+                const data = await apiResponse.json();
+                console.log(data);
+                console.log("\n--- AI REVIEW ---");
+                console.log(data.choices[0].message.content);
+                console.log("-----------------\n");
+                aiBubble.textContent = data.choices[0].message.content;
+                aiBubble.className = "bg-light p-3 rounded mb-3 border w-75";
+                chatArea.appendChild(aiBubble); //adds AI response within the ChatArea element
+            } catch (error) {
+                console.error("Error connecting to the API:", error);
+            }
         }, 2000);
-
     }
 
 });

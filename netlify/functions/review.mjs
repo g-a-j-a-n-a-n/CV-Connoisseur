@@ -1,14 +1,14 @@
 export default async function review(req) {
     console.log("Review function running");
     try {
-
         const reqData = await req.json();
-        console.log(reqData);
+        console.log(reqData.resume);
+
         const endpointURl = "https://api.groq.com/openai/v1/chat/completions";
         const options = {
             method: 'POST',
             headers: {
-                'Authorization': `Bearer ${Netlify.env.get("API_key")}`,
+                'Authorization': `Bearer ${Netlify.env.get("API_KEY")}`,
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
@@ -21,7 +21,7 @@ export default async function review(req) {
                     },
                     {
                         role: "user",
-                        content: reqData
+                        content: reqData.resume
                     }
                 ]
             })
