@@ -1,91 +1,304 @@
-/* Reset basic margins and ensure the body takes up the full screen height */
+:root {
+    --chef-primary: #d35400; /* Burnt Orange - Heat */
+    --chef-secondary: #2c3e50; /* Charcoal - Grill */
+    --chef-accent: #27ae60; /* Fresh Basil - Garnish */
+    --chef-bg: #fdfefe; /* Clean Kitchen White */
+    --chef-text: #2c3e50;
+    --chef-card: #ffffff;
+    --chef-border: #dee2e6;
+    --chef-input-bg: #f8f9fa;
+    --sidebar-width: 280px;
+}
+
+[data-theme="dark"] {
+    --chef-primary: #e67e22;
+    --chef-secondary: #ecf0f1;
+    --chef-accent: #2ecc71;
+    --chef-bg: #1a1a1a; /* Dark Kitchen */
+    --chef-text: #f5f5f5;
+    --chef-card: #2d2d2d;
+    --chef-border: #444;
+    --chef-input-bg: #333;
+}
+
 body, html {
     margin: 0;
     padding: 0;
     height: 100vh;
-    overflow: hidden; /* Prevents the whole page from scrolling */
+    overflow: hidden;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: var(--chef-bg);
+    color: var(--chef-text);
+    transition: background-color 0.3s, color 0.3s;
 }
 
-/* Flexbox container to put the sidebar and main content side-by-side */
 .app-container {
     display: flex;
     height: 100vh;
 }
 
-/*SIDEBAR STYLES*/
-.sidebar {
-    width: 260px;          /* Fixed width for the sidebar */
+/* AUTH MODAL STYLES */
+#authOverlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
     height: 100%;
-    transition: width 0.3s ease, padding 0.3s ease; /* Smooth transition when opening/closing */
-    overflow-y: auto;      /* Allows scrolling inside the sidebar if history gets long */
+    background: rgba(0,0,0,0.8);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 2000;
 }
 
-/* will be added/removed by JavaScript to hide sidebar */
+.auth-card {
+    background: var(--chef-card);
+    padding: 2.5rem;
+    border-radius: 15px;
+    width: 100%;
+    max-width: 400px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+    border: 2px solid var(--chef-primary);
+}
+
+.auth-card h3 {
+    color: var(--chef-primary);
+    font-weight: 700;
+}
+
+/* SIDEBAR STYLES */
+.sidebar {
+    width: var(--sidebar-width);
+    height: 100%;
+    background-color: var(--chef-card);
+    border-right: 1px solid var(--chef-border);
+    transition: transform 0.3s ease, width 0.3s ease;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+}
+
 .sidebar.hidden {
-    width: 0px;            /* Shrinks to nothing */
-    padding: 0;
-    border-right: none !important;
+    width: 0;
+    transform: translateX(-100%);
     overflow: hidden;
+    border-right: none;
+}
+
+.sidebar-header {
+    padding: 1.5rem;
+    border-bottom: 1px solid var(--chef-border);
+    font-weight: bold;
+    color: var(--chef-primary);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.sidebar-content {
+    flex: 1;
+    padding: 1rem;
 }
 
 .sidebar-item {
-    background-color: #e9ecef;
-    border: none;
-    color: #495057;
+    background: var(--chef-input-bg);
+    border: 1px solid var(--chef-border);
+    color: var(--chef-text);
+    padding: 12px;
+    margin-bottom: 10px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-align: left;
+    width: 100%;
+    font-size: 0.9rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
-/*MAIN CONTENT STYLES*/
+.sidebar-item:hover {
+    border-color: var(--chef-primary);
+    background: rgba(211, 84, 0, 0.1);
+}
+
+/* MAIN CONTENT */
 .main-content {
-    flex: 1;               /* Takes up all remaining space next to the sidebar */
+    flex: 1;
     display: flex;
-    flex-direction: column; /* Stacks header, chat area, and input area vertically */
+    flex-direction: column;
     height: 100vh;
+    background-color: var(--chef-bg);
 }
 
 .header {
-    background-color: white;
-    z-index: 10;
+    background-color: var(--chef-card);
+    border-bottom: 1px solid var(--chef-border);
+    padding: 1rem 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
 }
 
-/*CHAT AREA STYLES*/
+.header-brand {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+/* CHAT AREA */
 .chat-area {
-    flex: 1;               /* Pushes the input area to the bottom */
-    overflow-y: auto;      /* Allows the chat messages to scroll */
-    background-color: #ffffff;
+    flex: 1;
+    overflow-y: auto;
+    padding: 2rem;
+    background-image: radial-gradient(var(--chef-border) 0.5px, transparent 0.5px);
+    background-size: 20px 20px;
 }
 
-/*INPUT AREA STYLES*/
+.message-bubble {
+    max-width: 75%;
+    padding: 1.25rem;
+    border-radius: 15px;
+    margin-bottom: 1.5rem;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    line-height: 1.6;
+}
+
+.user-message {
+    background-color: var(--chef-primary);
+    color: white;
+    margin-left: auto;
+    border-bottom-right-radius: 2px;
+}
+
+.ai-message {
+    background-color: var(--chef-card);
+    color: var(--chef-text);
+    border: 1px solid var(--chef-border);
+    border-bottom-left-radius: 2px;
+}
+
+/* INPUT AREA */
 .input-area {
-    background-color: white;
+    padding: 1.5rem 2rem;
+    background-color: var(--chef-card);
+    border-top: 1px solid var(--chef-border);
 }
 
-.input-group {
-    background-color: #f1f3f5 !important; /* gray bar */
-    align-items: stretch; /* helps btn match textarea height*/
+.chef-input-group {
+    display: flex;
+    gap: 10px;
+    background: var(--chef-input-bg);
+    padding: 10px;
+    border-radius: 12px;
+    border: 2px solid var(--chef-primary);
 }
 
 .resume-textarea {
-    min-height: 120px;
-    max-height: 220px;
-    overflow-y: auto; /*scroll functionality*/
+    flex: 1;
+    background: transparent;
+    border: none;
+    color: var(--chef-text);
     resize: none;
-    line-height: 1.35;
-    padding-top: .75rem; /*so text sits nicer*/
-    padding-bottom: .75rem;
+    padding: 10px;
+    padding-bottom: 40px; /* Space for the file upload button */
+    font-size: 1rem;
+    min-height: 100px;
 }
 
-/*BUTTON STYLES*/
-/* Send button color */
-#reviewBtn {
-    background-color: #5f35e0; /* pick your color */
-    -webkit-text-fill-color: white;
+.resume-textarea:focus {
+    outline: none;
 }
 
-#reviewBtn:hover {
-    background-color: #8915e8;
+.file-upload-wrapper {
+    position: absolute;
+    bottom: 5px;
+    right: 5px;
+    z-index: 10;
 }
 
-/*FOOTER STYLES*/
-.footer {
-    background-color: white;
+.file-upload-label {
+    background-color: var(--chef-card);
+    border: 1px solid var(--chef-border);
+    padding: 0.25rem 0.75rem;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    color: var(--chef-primary);
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.file-upload-label:hover {
+    background-color: var(--chef-primary);
+    color: white;
+}
+
+/* Markdown Styling */
+.ai-message {
+    line-height: 1.6;
+}
+
+.ai-message h1, .ai-message h2, .ai-message h3 {
+    color: var(--chef-primary);
+    margin-top: 1rem;
+    font-weight: 700;
+}
+
+.ai-message ul, .ai-message ol {
+    margin-bottom: 1rem;
+    padding-left: 1.5rem;
+}
+
+.ai-message strong {
+    color: var(--chef-primary);
+    font-weight: 700;
+}
+
+.ai-message blockquote {
+    border-left: 4px solid var(--chef-accent);
+    padding-left: 1rem;
+    font-style: italic;
+    color: var(--chef-secondary);
+}
+
+.ai-message code {
+    background-color: var(--chef-input-bg);
+    padding: 0.2rem 0.4rem;
+    border-radius: 4px;
+    font-family: monospace;
+}
+
+.chef-btn {
+    background-color: var(--chef-primary);
+    color: white;
+    border: none;
+    padding: 0.8rem 1.5rem;
+    border-radius: 8px;
+    font-weight: 600;
+    transition: filter 0.2s;
+}
+
+.chef-btn:hover {
+    filter: brightness(1.1);
+}
+
+.chef-btn-secondary {
+    background-color: var(--chef-secondary);
+}
+
+/* UTILS */
+.hidden {
+    display: none !important;
+}
+
+.theme-toggle {
+    cursor: pointer;
+    font-size: 1.5rem;
+    background: none;
+    border: none;
+    padding: 5px;
+    color: var(--chef-text);
 }

@@ -17,9 +17,9 @@ export default async function review(req) {
                 messages: [
                     {
                         role: "system",
-                        content: "You are an expert technical recruiter. Review the provided" +
-                            " resume text. Give 2 strengths and 2 areas for improvement." +
-                            "  Present your response in paragraphs and don't use any highlights, boldings, or any special sort of text."
+                        content: "You are the Head Chef of Resumes. Your job is to 'taste' and 'season' any provided resume, regardless of the job role or profession." +
+                            " Give 2 'Signature Strengths' and 2 'Ingredients to Improve'. Use cooking metaphors throughout (e.g., 'well-marinated experience', 'overcooked bullet points', 'add a dash of keywords')." +
+                            " Present your response in a digestible manner using Markdown formatting. Use headings, bold text, and bullet points to make it easy to read. Keep the tone professional, authoritative yet culinary."
                     },
                     {
                         role: "user",

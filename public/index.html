@@ -6,59 +6,106 @@
     <title>CV Connoisseur</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
+    <!-- External Libraries for Markdown and File Parsing -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js"></script>
 </head>
 <body>
 
-<!--Main Container to hold everything-->
+<!-- Auth Overlay for Login/Register -->
+<div id="authOverlay">
+    <div class="auth-card">
+        <div class="text-center mb-4">
+            <h3 id="authTitle">Head Chef's Entry</h3>
+            <p class="text-muted" id="authSubtitle">Login to season your resume, no matter your profession</p>
+        </div>
+        <form id="authForm">
+            <div class="mb-3">
+                <input type="text" id="username" class="form-control" placeholder="User Name (Username)" required>
+            </div>
+            <div class="mb-3">
+                <input type="password" id="password" class="form-control" placeholder="Secret Spice (Password)" required>
+            </div>
+            <button type="submit" class="chef-btn w-100 mb-3" id="authSubmitBtn">Login</button>
+            <div class="text-center">
+                <small>
+                    <span id="authToggleText">New to the kitchen?</span>
+                    <a href="#" id="authToggleLink" class="text-primary fw-bold">Register</a>
+                </small>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Main Container to hold everything -->
 <div class="app-container">
 
-    <!--Left Sidebar (History-->
-    <div id="sidebar" class="sidebar bg-light border-end">
-        <div class="p-3">
-            <button class="btn btn-secondary w-100 mb-2 text-start sidebar-item">Previous Review 1</button>
-            <button class="btn btn-secondary w-100 mb-2 text-start sidebar-item">Previous Review 2</button>
+    <!-- Left Sidebar (History) -->
+    <div id="sidebar" class="sidebar hidden">
+        <div class="sidebar-header">
+            <span>🍳 Recipe History</span>
+        </div>
+        <div class="sidebar-content" id="historyList">
+            <!-- History items will be injected here -->
+        </div>
+        <div class="p-3 border-top">
+            <button id="logoutBtn" class="chef-btn chef-btn-secondary w-100">Leave Kitchen</button>
         </div>
     </div>
 
-    <!--Main Content Area (Right Side)-->
+    <!-- Main Content Area (Right Side) -->
     <div class="main-content">
 
-        <!--Header (Logo, Title, Toggle Button)-->
-        <header class="header p-3 border-bottom d-flex align-items-center justify-content-center position-relative">
-            <!--Button to toggle the sidebar (positioned on the left)-->
-            <button id="toggleSidebarBtn" class="btn btn-outline-secondary position-absolute start-0 ms-3">☰ History</button>
+        <!-- Header -->
+        <header class="header">
+            <div class="header-brand">
+                <button id="toggleSidebarBtn" class="chef-btn-secondary chef-btn py-1 px-3">☰ Menu</button>
+                <div class="d-flex align-items-center gap-2">
+                    <img src="Logo/Logo_img.png" alt="Logo" style="width: 40px; height: 40px; object-fit: contain;">
+                    <h4 class="mb-0 fw-bold d-none d-md-block" style="color: var(--chef-primary)">CV Connoisseur</h4>
+                </div>
+            </div>
 
-            <!--Logo and Title block-->
-            <img src="Logo/Logo_img.png" alt="Logo" class="mb-2" style="width: 100px;">
-            <div class="text-center header-title">
-                <h2 class="mb-0 text-primary fw-bold">CV Connoisseur</h2>
-                <small class="text-muted">AI-Powered Resume Reviews</small>
+            <div class="d-flex align-items-center gap-3">
+                <button id="themeToggle" class="theme-toggle" title="Toggle Dark/Light Mode">🌓</button>
+                <div id="userBadge" class="d-none d-sm-block fw-bold">
+                    Chef <span id="displayUsername">...</span>
+                </div>
             </div>
         </header>
 
-        <!--Chat / Response Area (white area)-->
-        <main class="chat-area p-4" id="chatArea">
-            <!-- Example of an AI response bubble -->
-            <div class="ai-message bg-light p-3 rounded mb-3 border w-75">
-                <p class="mb-0">Hello! Paste your resume below and I will review it.</p>
+        <!-- Chat / Response Area -->
+        <main class="chat-area" id="chatArea">
+            <div class="ai-message message-bubble">
+                <p class="mb-0">Welcome to the kitchen! I'm your Head Chef. Paste any resume below, and I'll help you season it to perfection, regardless of your career path.</p>
             </div>
         </main>
 
-        <!--The Input Bar (Bottom gray bar)-->
-        <div class="input-area py-2 px-4">
-            <div class="input-group input-group-lg shadow-sm overflow-hidden bg-light rounded-3">
-                <!--Text input-->
-                <textarea
-                        id="resumeInput"
-                        class="form-control border-0 bg-transparent ps-4 resume-textarea"
-                        placeholder="Paste your resume here..."
-                        rows="4"
-                ></textarea>
-                <!--Submit Button-->
-                <button class="btn px-4 fw-bold" id="reviewBtn">Review</button>
+        <!-- Input Bar -->
+        <div class="input-area">
+            <div class="chef-input-group shadow-sm">
+                <div class="w-100 position-relative">
+                    <textarea
+                            id="resumeInput"
+                            class="resume-textarea"
+                            placeholder="Paste your resume here (any profession)..."
+                            rows="3"
+                    ></textarea>
+                    <div class="file-upload-wrapper">
+                        <label for="fileInput" class="file-upload-label" title="Attach PDF or Word Recipe">
+                            📎 <span class="d-none d-sm-inline">Add Ingredient (PDF/DOCX)</span>
+                        </label>
+                        <input type="file" id="fileInput" accept=".pdf,.docx" class="d-none">
+                    </div>
+                </div>
+                <button class="chef-btn" id="reviewBtn">Cook Review</button>
             </div>
+            <div id="fileStatus" class="text-muted mt-1" style="font-size: 0.75rem; min-height: 1rem;"></div>
+            <footer class="text-center text-muted mt-2" style="font-size: 0.8rem">
+                © Copyright 2026 Gajanan Dhongade | Served by AI
+            </footer>
         </div>
-        <footer class="text-center text-muted mt-1">© Copyright 2026 Gajanan Dhongade</footer>
     </div>
 </div>
 
